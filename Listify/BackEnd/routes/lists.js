@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const List = require('../models/List'); // Importar el modelo
-const authenticate = require('../middleware/authenticate'); // Middleware para token
+const List = require('../models/list'); // Importar el modelo
+const authenticate = require('../middleware/authenticateToken'); // Middleware para token
 
 // Cargar listas del usuario autenticado
 router.get('/', authenticate, async (req, res) => {
