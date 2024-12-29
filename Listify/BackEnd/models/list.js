@@ -20,6 +20,14 @@ const ListSchema = new mongoose.Schema(
                 checked: { 
                     type: Boolean, 
                     default: false 
+                },
+                amountInitial: { 
+                    type: Number, 
+                    required: true 
+                },
+                amountFinal: { 
+                    type: Number, 
+                    required: true 
                 }
             }
         ],
