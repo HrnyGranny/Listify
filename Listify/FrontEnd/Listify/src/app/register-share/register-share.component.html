@@ -1,0 +1,45 @@
+<div class="container px-4 px-lg-5 mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3 class="mb-0">Register</h3>
+                    <small>Powered by Listify</small>
+                </div>
+                <div class="card-body">
+                    <form (ngSubmit)="onRegister()" #registerForm="ngForm" novalidate>
+                        <div class="mb-3">
+                            <label for="registerEmail" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="registerEmail" name="email" [(ngModel)]="registerData.email" placeholder="Enter email" required [ngClass]="{'is-invalid': emailExists}">
+                            <div class="invalid-feedback">
+                                Please enter your email address.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="registerUsername" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="registerUsername" name="username" [(ngModel)]="registerData.username" placeholder="Enter username" required [ngClass]="{'is-invalid': usernameExists}">
+                            <div class="invalid-feedback">
+                                Please enter your username.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="registerPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="registerPassword" name="password" [(ngModel)]="registerData.password" placeholder="Password" required [ngClass]="{'is-invalid': passwordMismatch}">
+                            <div class="invalid-feedback">
+                                Please enter your password.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" [(ngModel)]="registerData.confirmPassword" placeholder="Confirm Password" required [ngClass]="{'is-invalid': passwordMismatch}">
+                            <div class="invalid-feedback">
+                                Please confirm your password.
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100" [disabled]="!registerForm.form.valid">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

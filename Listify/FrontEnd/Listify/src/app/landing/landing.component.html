@@ -1,0 +1,206 @@
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="#">Listify</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- Masthead-->
+<header class="masthead">
+    <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
+        <div class="d-flex justify-content-center">
+            <div class="text-center">
+                <h1 class="mx-auto my-0 text-uppercase">Listify</h1>
+                <h2 class="text-white-50 mx-auto mt-2 mb-5">Your ultimate shopping list app.</h2>
+                <a class="btn btn-primary" href="#" data-bs-toggle="modal" data-bs-target="#authModal">Get Started</a>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- About-->
+<section class="about-section text-center" id="about">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
+            <div class="col-lg-8">
+                <h2 class="text-white mb-4">Manage Your Shopping Lists Efficiently</h2>
+                <p class="text-white-50">
+                    Listify is shopping list app created to help you manage your shopping lists efficiently. With Listify, you can easily create, edit, and share your shopping lists with others. Our app is designed to make your shopping experience as smooth and convenient as possible.
+                </p>
+            </div>
+        </div>
+        <div class="row gx-4 gx-lg-5 align-items-center mb-5">
+            <div class="col-lg-6">
+                <h2 class="text-white mb-4">Free Version</h2>
+                <p class="text-white-50">
+                    Users who have not paid can create up to 2 lists, each list can have a maximum of 10 products, and they can only share it with 1 person.
+                </p>
+            </div>
+            <div class="col-lg-6">
+                <img class="img-fluid" src="/img/carro-vacio.png" alt="Free Version Image">
+            </div>
+        </div>
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-lg-6 order-lg-2">
+                <h2 class="text-white mb-4">Premium Version</h2>
+                <p class="text-white-50">
+                    Users who have paid can create as many lists as they want, add all the products they desire, and share them with as many people as they want. The payment is made by card, costs 3 euros, and is valid for 1 year.
+                </p>
+            </div>
+            <div class="col-lg-6 order-lg-1">
+                <img class="img-fluid" src="/img/carro-premium.png" alt="Premium Version Image">
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Contact-->
+<section class="contact-section bg-black" id="contact">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5">
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="card py-4 h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-map-marked-alt text-primary mb-2"></i>
+                        <h4 class="text-uppercase m-0">Address</h4>
+                        <hr class="my-4 mx-auto" />
+                        <div class="small text-black-50">Ciudad Real, España</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="card py-4 h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-envelope text-primary mb-2"></i>
+                        <h4 class="text-uppercase m-0">Email</h4>
+                        <hr class="my-4 mx-auto" />
+                        <div class="small text-black-50"><a href="mailto:alvaroruizroldan@gmail.com">alvaroruizroldan&#64;gmail.com</a></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="card py-4 h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-mobile-alt text-primary mb-2"></i>
+                        <h4 class="text-uppercase m-0">Phone</h4>
+                        <hr class="my-4 mx-auto" />
+                        <div class="small text-black-50">627 02 97 62</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="social d-flex justify-content-center">
+            <a class="mx-2" href="https://www.instagram.com/alvarorur" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a class="mx-2" href="https://github.com/HrnyGranny" target="_blank"><i class="fab fa-github"></i></a>
+        </div>
+    </div>
+</section>
+
+<!-- Authentication Modal -->
+<div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="authModalLabel">Login or Register</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <h3>Login</h3>
+                        <form (ngSubmit)="onLogin()" #loginForm="ngForm" novalidate>
+                            <div class="mb-3">
+                                <label for="loginUsername" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="loginUsername" name="username" [(ngModel)]="loginData.username" placeholder="Enter username" required [ngClass]="{'is-invalid': loginErrorU}">
+                                <div class="invalid-feedback">
+                                    Please enter your username.
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="loginPassword" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="loginPassword" name="password" [(ngModel)]="loginData.password" placeholder="Password" required [ngClass]="{'is-invalid': loginErrorP}">
+                                <div class="invalid-feedback">
+                                    Please enter your password.
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary" [disabled]="!loginForm.form.valid">Login</button>
+                            <div class="mt-3">
+                                <a class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">Forgot password?</a>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h3>Register</h3>
+                        <form (ngSubmit)="onRegister()" #registerForm="ngForm" novalidate>
+                            <div class="mb-3">
+                                <label for="registerEmail" class="form-label">Email address</label>
+                                <input type="email" class="form-control" id="registerEmail" name="email" [(ngModel)]="registerData.email" placeholder="Enter email" required [ngClass]="{'is-invalid': emailExists}">
+                                <div class="invalid-feedback">
+                                    Please enter your email address.
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="registerUsername" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="registerUsername" name="username" [(ngModel)]="registerData.username" placeholder="Enter username" required [ngClass]="{'is-invalid': usernameExists}">
+                                <div class="invalid-feedback">
+                                    Please enter your username.
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="registerPassword" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="registerPassword" name="password" [(ngModel)]="registerData.password" placeholder="Password" required [ngClass]="{'is-invalid': passwordMismatch}">
+                                <div class="invalid-feedback">
+                                    Please enter your password.
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" [(ngModel)]="registerData.confirmPassword" placeholder="Confirm Password" required [ngClass]="{'is-invalid': passwordMismatch}">
+                                <div class="invalid-feedback">
+                                    Please confirm your password.
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-secondary" [disabled]="!registerForm.form.valid">Register</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Forgot Password Modal -->
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="forgotPasswordModalLabel">Forgot Password</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="onForgotPassword()" #forgotPasswordForm="ngForm" novalidate>
+            <div class="mb-3">
+              <label for="forgotPasswordUsername" class="form-label">Username</label>
+              <input type="text" class="form-control" id="forgotPasswordUsername" name="username" [(ngModel)]="forgotPasswordData.username" placeholder="Enter username" required>
+              <div class="invalid-feedback">
+                Please enter your username.
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary" [disabled]="!forgotPasswordForm.form.valid">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+
+<footer class="footer bg-black small text-center text-white-50">
+    <div class="container px-4 px-lg-5">Copyright &copy; Listify 2024</div>
+  </footer>
+  
