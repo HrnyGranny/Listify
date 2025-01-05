@@ -109,6 +109,42 @@ module.exports = (wss) => {
         }
     });
 
+    // Añadir / eliminar miembros compartidos SIN AUTENTICACION
+    router.put('/:id/shareNo', async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { share } = req.body;
+
+            // Retrieve the list to get the owner
+            const list = await List.findById(id);
+
+            if (!list) {
+                return res.status(404).json({ error: 'Lista no encontrada' });
+            }
+
+            const owner = list.owner;
+
+            // Update the list with the new share value
+            const updatedList = await List.findOneAndUpdate(
+                { _id: id, owner: owner },
+                { share: share },
+                { new: true }
+            );
+
+            if (!updatedList) {
+                return res.status(404).json({ error: 'No tienes permisos para actualizar esta lista' });
+            }
+
+            res.status(200).json({
+                message: 'Miembros compartidos actualizados exitosamente',
+                list: updatedList
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Error al actualizar los miembros compartidos' });
+        }
+    });
+
     // Eliminar una lista
     router.delete('/:id', authenticate, async (req, res) => {
         try {
