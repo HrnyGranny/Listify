@@ -1,3 +1,7 @@
+<p align="center">
+    <img src="https://github.com/user-attachments/assets/279b6de8-2d6d-41ee-9bde-a1db088c9d61" alt="Listify">
+</p>
+
 # Listify
 
 Listify is a web application designed to help you manage your shopping lists in a simple and efficient way. With a modern interface developed in Angular and a robust backend built with Node.js and Express, Listify offers features to create, share, and collaborate on shopping lists.
@@ -5,7 +9,7 @@ Listify is a web application designed to help you manage your shopping lists in 
 ## Creator
 
 Created by **Álvaro Ruiz Roldán**  
-Email: [youremail@domain.com](mailto:youremail@domain.com)
+Email: [Alvaro.Ruiz12@alu.uclm.es](mailto:Alvaro.Ruiz12@alu.uclm.es)
 
 ## Running Locally
 
