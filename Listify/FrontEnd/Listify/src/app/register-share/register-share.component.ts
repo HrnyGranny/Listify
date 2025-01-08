@@ -66,11 +66,12 @@ export class RegisterShareComponent implements OnInit {
       });
       return;
     }
-    
+
     this.authService.register(this.registerData).subscribe(
       (response: any) => {
         if (response.token) {
-          localStorage.setItem('token', response.token);
+          this.authService.setToken(response.token);
+          const user = this.parseJwt(response.token);
           if (this.listId) {
             // Lógica para asignar la lista compartida al usuario registrado
             this.listService.updateListShareNo(this.listId, [this.registerData.username]).subscribe(() => {
@@ -171,5 +172,18 @@ export class RegisterShareComponent implements OnInit {
     this.usernameExists = false;
     this.emailExists = false;
     this.passwordMismatch = false;
+  }
+
+  parseJwt(token: string): any {
+    if (!token) {
+      return null;
+    }
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
   }
 }

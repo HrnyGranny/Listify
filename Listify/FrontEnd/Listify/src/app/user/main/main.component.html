@@ -39,7 +39,7 @@
             <i class="bi" [ngClass]="{'bi-chevron-right': !userListsExpanded, 'bi-chevron-down': userListsExpanded}"></i>
             Your Lists
           </a>
-          <div class="collapse" id="userLists" (shown.bs.collapse)="userListsExpanded = true" (hidden.bs.collapse)="userListsExpanded = false">
+          <div class="collapse show" id="userLists" (shown.bs.collapse)="userListsExpanded = true" (hidden.bs.collapse)="userListsExpanded = false">
             <ul class="list-group list-group-flush" style="border: none;">
               <li *ngFor="let list of filteredUserLists" class="list-group-item list-group-item-action" [ngClass]="{'bg-success text-white': selectedList?._id === list._id, 'bg-light': selectedList?._id !== list._id}" style="border: none;" (click)="selectList(list)">
                 {{ list.name }}
@@ -52,7 +52,7 @@
             <i class="bi" [ngClass]="{'bi-chevron-right': !sharedListsExpanded, 'bi-chevron-down': sharedListsExpanded}"></i>
             Shared Lists
           </a>
-          <div class="collapse" id="sharedLists" (shown.bs.collapse)="sharedListsExpanded = true" (hidden.bs.collapse)="sharedListsExpanded = false">
+          <div class="collapse show" id="sharedLists" (shown.bs.collapse)="sharedListsExpanded = true" (hidden.bs.collapse)="sharedListsExpanded = false">
             <ul class="list-group list-group-flush" style="border: none;">
               <li *ngFor="let list of filteredSharedLists" class="list-group-item list-group-item-action" [ngClass]="{'bg-success text-white': selectedList?._id === list._id, 'bg-light': selectedList?._id !== list._id}" style="border: none;" (click)="selectList(list)">
                 {{ list.name }}

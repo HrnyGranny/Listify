@@ -229,6 +229,21 @@ export class MainComponent implements OnInit {
   }
 
   deleteList(id: string): void {
+    const listToDelete = this.userLists.find(list => list._id === id) || this.sharedLists.find(list => list._id === id);
+  
+    if (listToDelete && listToDelete.owner !== this.username) {
+      Swal.fire({
+        position: 'bottom-end',
+        icon: 'warning',
+        title: 'Warning',
+        text: 'Only the owner can delete this list',
+        showConfirmButton: false,
+        timer: 3000,
+        toast: true
+      });
+      return;
+    }
+  
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",

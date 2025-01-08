@@ -48,39 +48,47 @@ module.exports = (wss) => {
         }
     });
 
-    // Añadir / eliminar / editar productos de una lista
-    router.put('/:id/content', authenticate, async (req, res) => {
-        try {
-            const { id } = req.params;
-            const { content } = req.body;
-            const username = req.user.username;
+        // Añadir / eliminar / editar productos de una lista
+        router.put('/:id/content', authenticate, async (req, res) => {
+            try {
+                const { id } = req.params;
+                const { content } = req.body;
+                const username = req.user.username;
     
-            const list = await List.findOneAndUpdate(
-                { _id: id, $or: [{ owner: username }, { share: username }] },
-                { content: content },
-                { new: true }
-            );
+                console.log('Solicitud para actualizar contenido recibida:', { id, content });
     
-            if (!list) {
-                return res.status(404).json({ error: 'Lista no encontrada o no tienes permisos' });
-            }
+                const list = await List.findOneAndUpdate(
+                    { _id: id, $or: [{ owner: username }, { share: username }] },
+                    { content: content },
+                    { new: true }
+                );
     
-            // Emitir evento WebSocket con solo el contenido de la lista
-            wss.clients.forEach(client => {
-                if (client.readyState === WebSocket.OPEN) {
-                    client.send(JSON.stringify({
-                        type: 'list_updated',
-                        listId: list._id,
-                        content: list.content
-                    }));
+                if (!list) {
+                    console.log('Lista no encontrada o permisos insuficientes.');
+                    return res.status(404).json({ error: 'Lista no encontrada o no tienes permisos' });
                 }
-            });
     
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ error: 'Error al actualizar los productos' });
-        }
-    });
+                console.log('Lista actualizada en la base de datos:', list);
+    
+                // Emitir evento WebSocket
+                wss.clients.forEach(client => {
+                    if (client.readyState === WebSocket.OPEN) {
+                        client.send(JSON.stringify({
+                            type: 'list_updated',
+                            listId: list._id,
+                            content: list.content
+                        }));
+                        console.log('Evento WebSocket enviado a los clientes conectados.');
+                    }
+                });
+    
+                // Responder al cliente con la lista actualizada
+                res.status(200).json({ message: 'Lista actualizada exitosamente', list });
+            } catch (error) {
+                console.error('Error al actualizar los productos:', error);
+                res.status(500).json({ error: 'Error al actualizar los productos' });
+            }
+        });
 
     // Añadir / eliminar miembros compartidos
     router.put('/:id/share', authenticate, async (req, res) => {

@@ -42,7 +42,9 @@ export class AuthService {
   }
 
   setToken(token: string): void {
-    this.cookieService.set('token', token);
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 7); // Expira en 7 días
+    this.cookieService.set('token', token, expirationDate);
   }
 
   getUsername(): string {
