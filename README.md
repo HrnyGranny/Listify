@@ -49,3 +49,22 @@ ng serve
 ```
 
 The frontend will run on **port 4200**.
+
+## Test 
+
+Para ejecutar las pruebas de Listify, sigue estos pasos:
+
+1. **Navegar a la Carpeta de Pruebas**:
+   - Dirígete a la carpeta `tests` en la estructura de tu proyecto.
+
+2. **Ejecutar Pruebas para Selenium o JMeter**:
+ 
+   #### **Para Pruebas con Selenium**:
+
+   - Primero, navega a la carpeta `tests/selenium` 
+   
+   - Ejecuta las pruebas con `node` 
+
+   ```bash
+   node <testFileName.js>
+
