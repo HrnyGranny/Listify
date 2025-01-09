@@ -8,6 +8,8 @@ import { CommonModule } from '@angular/common';
 import { List, ListItem } from '../../models/list.model';
 import * as bootstrap from 'bootstrap';
 import Swal from 'sweetalert2';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-main',
@@ -33,6 +35,7 @@ export class MainComponent implements OnInit {
   shareLink: string = '';
   currentPassword: string = '';
   newPassword: string = '';
+  private destroy$ = new Subject<void>();
 
   constructor(
     private router: Router,
@@ -44,9 +47,14 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
     this.username = this.authService.getUsername();
     this.loadLists();
-    this.webSocketService.getMessages().subscribe((data) => {
-      this.handleWebSocketMessage(data);
-    });
+    this.webSocketService.getMessages()
+      .pipe(takeUntil(this.destroy$)) // Se asegura de desuscribirse al destruir el componente
+      .subscribe((data) => this.handleWebSocketMessage(data));
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete(); // Libera los recursos para evitar fugas de memoria
   }
 
   loadLists(): void {
@@ -133,6 +141,21 @@ export class MainComponent implements OnInit {
   }
 
   deleteList(id: string): void {
+    const listToDelete = this.userLists.find(list => list._id === id) || this.sharedLists.find(list => list._id === id);
+  
+    if (listToDelete && listToDelete.owner !== this.username) {
+      Swal.fire({
+        position: 'bottom-end',
+        icon: 'warning',
+        title: 'Warning',
+        text: 'Only the owner can delete this list',
+        showConfirmButton: false,
+        timer: 3000,
+        toast: true
+      });
+      return;
+    }
+  
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -231,37 +254,100 @@ export class MainComponent implements OnInit {
 
   updateListContent(): void {
     if (this.selectedList) {
-      this.listService.updateListContent(this.selectedList._id, this.selectedList.content).subscribe(() => {
-        this.webSocketService.sendMessage({
-          type: 'list_updated',
-          listId: this.selectedList?._id,
-          content: this.selectedList?.content
-        });
-      });
+      this.listService.updateListContent(this.selectedList._id, this.selectedList.content).subscribe(
+        () => {
+          // Solo enviar el mensaje al WebSocket si la actualización fue exitosa
+          this.webSocketService.sendMessage({
+            type: 'list_updated',
+            listId: this.selectedList?._id,
+            content: this.selectedList?.content
+          });
+        },
+        (error) => {
+          console.error('Error al actualizar la lista:', error);
+        }
+      );
     }
   }
+  
 
   shareList(): void {
     if (this.selectedList) {
-      this.selectedList.share.push(this.shareWithUsername);
-      this.listService.updateListShare(this.selectedList._id, this.selectedList.share).subscribe(() => {
-        this.shareWithUsername = '';
-        const modalElement = document.getElementById('shareListModal');
-        if (modalElement) {
-          const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-          modal.hide();
-        }
-        // Generar el enlace de registro con la lista compartida
-        this.shareLink = `${window.location.origin}/register?listId=${this.selectedList?._id}`;
+      if (this.shareWithUsername === this.selectedList.owner) {
         Swal.fire({
           position: 'bottom-end',
-          icon: 'success',
-          title: 'List shared successfully!',
+          icon: 'warning',
+          title: 'Warning',
+          text: 'You cannot share the list with the owner',
           showConfirmButton: false,
           timer: 3000,
           toast: true
         });
-      });
+        return;
+      }
+  
+      if (this.selectedList.share.includes(this.shareWithUsername)) {
+        Swal.fire({
+          position: 'bottom-end',
+          icon: 'warning',
+          title: 'Warning',
+          text: 'This user is already shared with',
+          showConfirmButton: false,
+          timer: 3000,
+          toast: true
+        });
+        return;
+      }
+  
+      this.authService.checkUserExists(this.shareWithUsername).subscribe(
+        (userExists: boolean) => {
+          if (!userExists) {
+            Swal.fire({
+              position: 'bottom-end',
+              icon: 'warning',
+              title: 'Warning',
+              text: 'This user does not exist',
+              showConfirmButton: false,
+              timer: 3000,
+              toast: true
+            });
+            return;
+          }
+  
+          if (this.selectedList) {
+            this.selectedList.share.push(this.shareWithUsername);
+          }
+          this.listService.updateListShare(this.selectedList!._id, this.selectedList!.share).subscribe(() => {
+            this.shareWithUsername = '';
+            const modalElement = document.getElementById('shareListModal');
+            if (modalElement) {
+              const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+              modal.hide();
+            }
+            // Generar el enlace de registro con la lista compartida
+            this.shareLink = `${window.location.origin}/register?listId=${this.selectedList?._id}`;
+            Swal.fire({
+              position: 'bottom-end',
+              icon: 'success',
+              title: 'List shared successfully!',
+              showConfirmButton: false,
+              timer: 3000,
+              toast: true
+            });
+          });
+        },
+        () => {
+          Swal.fire({
+            position: 'bottom-end',
+            icon: 'error',
+            title: 'Error',
+            text: 'An error occurred while checking the user',
+            showConfirmButton: false,
+            timer: 3000,
+            toast: true
+          });
+        }
+      );
     }
   }
 

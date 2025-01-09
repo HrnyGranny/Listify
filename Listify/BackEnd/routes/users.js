@@ -278,4 +278,20 @@ router.post('/upgrade-to-premium', authenticateToken, async (req, res) => {
     }
 });
 
+// Endpoint para verificar si un usuario existe (protegido)
+router.post('/check-user-exists', authenticateToken, async (req, res) => {
+    const { username } = req.body;
+
+    try {
+        const user = await User.findOne({ username });
+        if (user) {
+            return res.json(true);
+        } else {
+            return res.json(false);
+        }
+    } catch (error) {
+        return res.status(500).json({ message: 'Error en el servidor' });
+    }
+});
+
 module.exports = router;

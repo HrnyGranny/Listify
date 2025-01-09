@@ -273,6 +273,19 @@ export class MainComponent implements OnInit {
   }
 
   createList(): void {
+    if (this.userLists.length >= 2) {
+      Swal.fire({
+        position: 'bottom-end',
+        icon: 'warning',
+        title: 'Warning',
+        text: 'Non-premium users can only create up to 2 lists',
+        showConfirmButton: false,
+        timer: 3000,
+        toast: true
+      });
+      return;
+    }
+  
     const newList: List = {
       _id: '',
       name: this.newListName,
@@ -309,6 +322,19 @@ export class MainComponent implements OnInit {
 
   addItem(): void {
     if (this.selectedList) {
+      if (this.selectedList.content.length >= 10) {
+        Swal.fire({
+          position: 'bottom-end',
+          icon: 'warning',
+          title: 'Warning',
+          text: 'Non-premium users can only add up to 10 items per list',
+          showConfirmButton: false,
+          timer: 3000,
+          toast: true
+        });
+        return;
+      }
+  
       const newItem: ListItem = {
         item: this.newItemName,
         amountInitial: this.newItemAmountInitial,
@@ -361,25 +387,94 @@ export class MainComponent implements OnInit {
 
   shareList(): void {
     if (this.selectedList) {
-      this.selectedList.share.push(this.shareWithUsername);
-      this.listService.updateListShare(this.selectedList._id, this.selectedList.share).subscribe(() => {
-        this.shareWithUsername = '';
-        const modalElement = document.getElementById('shareListModal');
-        if (modalElement) {
-          const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-          modal.hide();
-        }
-        // Generar el enlace de registro con la lista compartida
-        this.shareLink = `${window.location.origin}/register?listId=${this.selectedList?._id}`;
+      if (this.shareWithUsername === this.selectedList.owner) {
         Swal.fire({
           position: 'bottom-end',
-          icon: 'success',
-          title: 'List shared successfully!',
+          icon: 'warning',
+          title: 'Warning',
+          text: 'You cannot share the list with the owner',
           showConfirmButton: false,
           timer: 3000,
           toast: true
         });
-      });
+        return;
+      }
+  
+      if (this.selectedList.share.includes(this.shareWithUsername)) {
+        Swal.fire({
+          position: 'bottom-end',
+          icon: 'warning',
+          title: 'Warning',
+          text: 'This user is already shared with',
+          showConfirmButton: false,
+          timer: 3000,
+          toast: true
+        });
+        return;
+      }
+  
+      if (this.selectedList.share.length >= 1) {
+        Swal.fire({
+          position: 'bottom-end',
+          icon: 'warning',
+          title: 'Warning',
+          text: 'Non-premium users can only share lists with 1 person',
+          showConfirmButton: false,
+          timer: 3000,
+          toast: true
+        });
+        return;
+      }
+  
+      this.authService.checkUserExists(this.shareWithUsername).subscribe(
+        (userExists: boolean) => {
+          if (!userExists) {
+            Swal.fire({
+              position: 'bottom-end',
+              icon: 'warning',
+              title: 'Warning',
+              text: 'This user does not exist',
+              showConfirmButton: false,
+              timer: 3000,
+              toast: true
+            });
+            return;
+          }
+  
+          if (this.selectedList) {
+            this.selectedList.share.push(this.shareWithUsername);
+          }
+          this.listService.updateListShare(this.selectedList!._id, this.selectedList!.share).subscribe(() => {
+            this.shareWithUsername = '';
+            const modalElement = document.getElementById('shareListModal');
+            if (modalElement) {
+              const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+              modal.hide();
+            }
+            // Generar el enlace de registro con la lista compartida
+            this.shareLink = `${window.location.origin}/register?listId=${this.selectedList!._id}`;
+            Swal.fire({
+              position: 'bottom-end',
+              icon: 'success',
+              title: 'List shared successfully!',
+              showConfirmButton: false,
+              timer: 3000,
+              toast: true
+            });
+          });
+        },
+        (error) => {
+          Swal.fire({
+            position: 'bottom-end',
+            icon: 'error',
+            title: 'Error',
+            text: 'An error occurred while checking the user',
+            showConfirmButton: false,
+            timer: 3000,
+            toast: true
+          });
+        }
+      );
     }
   }
 

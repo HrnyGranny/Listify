@@ -43,7 +43,7 @@ export class AuthService {
 
   setToken(token: string): void {
     const expirationDate = new Date();
-    expirationDate.setDate(expirationDate.getDate() + 7); // Expira en 7 días
+    expirationDate.setDate(expirationDate.getDate() + 1); // Expira en 1 día
     this.cookieService.set('token', token, expirationDate);
   }
 
@@ -66,5 +66,8 @@ export class AuthService {
 
   upgradeToPremium(): Observable<any> {
     return this.http.post(`${this.apiUrl}/upgrade-to-premium`, {}, { headers: this.getAuthHeaders() });
+  }
+  checkUserExists(username: string): Observable<boolean> {
+    return this.http.post<boolean>(`${this.apiUrl}/check-user-exists`, { username }, { headers: this.getAuthHeaders() });
   }
 }
