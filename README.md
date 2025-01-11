@@ -50,21 +50,34 @@ ng serve
 
 The frontend will run on **port 4200**.
 
-## Test 
+## Testing
 
-Para ejecutar las pruebas de Listify, sigue estos pasos:
+To run Listify tests:
 
-1. **Navegar a la Carpeta de Pruebas**:
-   - Dirígete a la carpeta `tests` en la estructura de tu proyecto.
+1. **Tests Folder:** Go to the `tests` folder.
 
-2. **Ejecutar Pruebas para Selenium o JMeter**:
- 
-   #### **Para Pruebas con Selenium**:
+2. **Run Tests:**
 
-   - Primero, navega a la carpeta `tests/selenium` 
-   
-   - Ejecuta las pruebas con `node` 
+    #### **Selenium (UI Tests):**
 
-   ```bash
-   node <testFileName.js>
+    * Folder: `tests/selenium`
+    * Install dependencies (npm): `npm install selenium-webdriver chromedriver` (or your driver)
+    * Run: `node <testFileName.js>`
+    * Requires a running web server.
 
+    #### **JMeter (Performance Tests):**
+
+    * Requires JMeter installed ([download](https://jmeter.apache.org/download_jmeter.cgi)).
+    * Folder: `tests/jmeter` (`.jmx` files).
+
+    * **Run (GUI):**
+        * Open JMeter.
+        * `File` -> `Open` (`.jmx`).
+        * Run (Play button).
+        * Analyze results (Listeners).
+
+    * **Run (Non-GUI - Recommended for load testing):**
+        * Navigate to JMeter's `bin` directory.
+        * Run: `jmeter -n -t ../../tests/jmeter/testPlan.jmx -l ../../tests/jmeter/results.jtl -j ../../tests/jmeter/jmeter.log`
+        * Analyze `results.jtl` in JMeter.
+        * `-n`: Non-GUI; `-t`: `.jmx`; `-l`: results; `-j`: log.
